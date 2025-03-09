@@ -1,0 +1,37 @@
+<!-- filepath: ProVisionAI/backend/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProVisionAI</title>
+</head>
+<body>
+    <h1>Welcome to ProVisionAI</h1>
+    <form id="upload-form">
+        <input type="file" id="image-input" accept="image/*">
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('image-input').files[0];
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const imageData = reader.result;
+                const response = await fetch('/annotate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image: imageData })
+                });
+                const result = await response.json();
+                document.getElementById('result').innerText = JSON.stringify(result);
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
