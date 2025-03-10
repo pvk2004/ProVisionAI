@@ -15,7 +15,7 @@ if uploaded_file is not None:
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='JPEG')
     img_byte_arr = img_byte_arr.getvalue()
-
+    
     response = requests.post('http://localhost:5000/annotate', json={
         'image': img_byte_arr.decode('latin1')
     })
