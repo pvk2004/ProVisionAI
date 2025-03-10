@@ -20,7 +20,15 @@ if uploaded_file is not None:
         'image': img_byte_arr.decode('latin1')
     })
 
-    if response.status_code == 200:
-        st.write(response.json())
-    else:
-        st.write("Error:", response.json())
+    try:
+        json_response = response.json()
+        if response.status_code == 200:
+            st.write(json_response)
+        else:
+            st.write("Error:", json_response)
+    except requests.exceptions.JSONDecodeError:
+        st.write("Error: API returned an empty or invalid response")
+        json_response = None
+    
+    
+    
